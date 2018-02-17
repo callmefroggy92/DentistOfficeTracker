@@ -99,9 +99,8 @@ public final class LoginController {
         Arrays.fill(password, Character.MIN_VALUE);
 
         SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        byte[] hash = skf.generateSecret(spec).getEncoded();
+        return skf.generateSecret(spec).getEncoded();
 
-        return hash;
     }
 
     /**
@@ -156,8 +155,7 @@ public final class LoginController {
         try {
             // Needs to create a random string then encrypt it using the
             String userKey = user.getPassword();
-            int length = userKey.length();
-            for(int i = 0; i < 16 - length; i++)
+            while(userKey.length() < 16)
                 userKey += '0';
 
             EncryptionMachine eMachine = new EncryptionMachine(userKey);
@@ -171,7 +169,7 @@ public final class LoginController {
             java.util.Arrays.fill(userKey.toCharArray(), (char)(rand.nextInt(10000)));
 
         } catch(Exception e){
-
+            e.printStackTrace();
         }
     }
     public static Boolean verifyPassword(User user) throws Exception {
@@ -214,8 +212,7 @@ public final class LoginController {
             String userKey = user.getPassword();
 
             // Adds 0s if password is not 16 characters long
-            int length = userKey.length();
-            for(int i = 0; i < 16 - length; i++)
+            while(userKey.length() < 16)
                 userKey += '0';
 
             EncryptionMachine eMachine = new EncryptionMachine(userKey);
@@ -226,7 +223,7 @@ public final class LoginController {
 
 
         } catch(Exception e){
-
+            e.printStackTrace();
         }
     }
 }
